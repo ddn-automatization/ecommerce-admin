@@ -55,8 +55,8 @@ stages:
     - script: |
         git clone https://$(GITHUB_TOKEN)@github.com/ddn-automatization/ecommerce-k8s
         ls
-        cd ecommerce-k8s/ecommerce-admin
-        sed -i 's/image: ddncr.azurecr.io\/ecommerce-admin:latest/image: ddncr.azurecr.io\/ecommerce-admin:$(tag)/' values.yaml
+        cd ecommerce-k8s
+        sed -i 's/image: ddncr.azurecr.io\/ecommerce-admin:latest/image: ddncr.azurecr.io\/ecommerce-admin:$(tag)/' ecommerce-admin/values.yaml
       displayName: Clone repository and modify file
     - task: HelmInstaller@1
       inputs:
@@ -68,7 +68,6 @@ stages:
         azureResourceGroup: 'ddn-infra-rg'
         kubernetesCluster: 'ddn-infra-aks1'
         command: 'upgrade'
-        chartType: 'FilePath'
-        chartPath: '$(System.DefaultWorkingDirectory)/ecommerce-k8s/ecommerce-admin'
-        releaseName: 'ecommerce-admin'
-        valueFile: 'values.yaml'
+        chartType: 'Name'
+        chartName: 'ecommerce-admin'
+        valueFile: 'ecommerce-admin/values.yaml'
