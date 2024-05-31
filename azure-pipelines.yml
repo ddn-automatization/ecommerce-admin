@@ -38,3 +38,40 @@ stages:
         tags: |
           $(tag)
           latest
+
+- stage: Deploy
+  displayName: Deploy
+  dependsOn: Build
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - script: |
+        sudo apt-get update
+        sudo apt-get install -y git
+      displayName: Install Git
+    - script: |
+        git clone https://github.com/ddn-automatization/ecommerce-k8s
+        cd ecommerce-k8s/ecommerce-admin
+        sed -i 's/image: ddncr.azurecr.io\/ecommerce-admin:latest/image: ddncr.azurecr.io\/ecommerce-admin:$(tag)/' values.yml
+        git config user.name "Azure DevOps"
+        git config user.email "azuredevops@domain.com"
+        git add values.yml
+        git commit -m "Modificación automatizada de la imagen en values.yml"
+        git push origin main
+      displayName: Clone repository and modify file
+    - task: HelmInstaller@1
+      inputs:
+        helmVersionToInstall: 'latest'
+    - task: HelmDeploy@0
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: 'Azure para estudiantes(c2b81daf-f6f7-43a0-957b-b330db4beee6)'
+        azureResourceGroup: 'ddn-infra-rg'
+        kubernetesCluster: 'ddn-infra-aks1'
+        command: 'upgrade'
+        chartType: 'Name'
+        chartName: 'ecommerce-admin'
+        valueFile: 'values.yml'
