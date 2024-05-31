@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { ImagePlus, Trash } from 'lucide-react';
+import { getPresetName } from '@/actions/get-cloudinary-preset-name';
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -53,7 +54,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           </div>
         ))}
       </div>
-      <CldUploadWidget onUpload={onUpload} uploadPreset={process.env.CLOUDINARY_PRESET_NAME ?? 'aglrzldd'}>
+      <CldUploadWidget onUpload={onUpload} uploadPreset="or44hamp">
         {({ open }) => {
           const onClick = () => {
             open();
