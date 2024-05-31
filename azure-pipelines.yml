@@ -55,12 +55,7 @@ stages:
     - script: |
         git clone https://$(GITHUB_TOKEN)@github.com/ddn-automatization/ecommerce-k8s
         cd ecommerce-k8s/ecommerce-admin
-        sed -i 's/image: ddncr.azurecr.io\/ecommerce-admin:latest/image: ddncr.azurecr.io\/ecommerce-admin:$(tag)/' values.yml
-        git config user.name "Azure DevOps"
-        git config user.email "azuredevops@domain.com"
-        git add values.yml
-        git commit -m "Modificación automatizada de la imagen en values.yml"
-        git push origin main
+        sed -i 's/image: ddncr.azurecr.io\/ecommerce-admin:latest/image: ddncr.azurecr.io\/ecommerce-admin:$(tag)/' values.yaml
       displayName: Clone repository and modify file
     - task: HelmInstaller@1
       inputs:
@@ -74,4 +69,4 @@ stages:
         command: 'upgrade'
         chartType: 'Name'
         chartName: 'ecommerce-admin'
-        valueFile: 'values.yml'
+        valueFile: 'values.yaml'
