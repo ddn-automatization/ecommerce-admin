@@ -53,7 +53,7 @@ stages:
         sudo apt-get install -y git
       displayName: Install Git
     - script: |
-        git clone https://github.com/ddn-automatization/ecommerce-k8s
+        git clone https://$(GITHUB_TOKEN)@github.com/ddn-automatization/ecommerce-k8s
         cd ecommerce-k8s/ecommerce-admin
         sed -i 's/image: ddncr.azurecr.io\/ecommerce-admin:latest/image: ddncr.azurecr.io\/ecommerce-admin:$(tag)/' values.yml
         git config user.name "Azure DevOps"
