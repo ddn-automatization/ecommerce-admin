@@ -62,6 +62,15 @@ stages:
       inputs:
         helmVersionToInstall: 'latest'
     - task: HelmDeploy@0
+      displayName: Helm list
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscription: 'Azure para estudiantes(c2b81daf-f6f7-43a0-957b-b330db4beee6)'
+        azureResourceGroup: 'ddn-infra-rg'
+        kubernetesCluster: 'ddn-infra-aks1'
+        command: ls
+        arguments: --all
+    - task: HelmDeploy@0
       inputs:
         connectionType: 'Azure Resource Manager'
         azureSubscription: 'Azure para estudiantes(c2b81daf-f6f7-43a0-957b-b330db4beee6)'
